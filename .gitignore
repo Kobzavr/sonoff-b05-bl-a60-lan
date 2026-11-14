@@ -1,0 +1,13 @@
+# Local device configuration containing your private eWeLink devicekey
+bulb_config.json
+
+# Runtime state & logs
+morning_state.json
+morning.log
+
+# Python cache & virtual environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/

@@ -1,0 +1,8 @@
+{
+  "ip": "192.168.0.100",
+  "port": 8081,
+  "deviceid": "1001xxxxxx",
+  "devicekey": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+  "name": "Sonoff B05-BL-A60",
+  "uiid": 136
+}
