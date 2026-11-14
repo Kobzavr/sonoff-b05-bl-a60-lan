@@ -1,6 +1,6 @@
 # Sonoff B05-BL-A60 Local LAN Controller & HTTP API (`BL602` / `UIID 136`)
 
-Lightweight, standalone Python CLI, custom Sunrise Wake-Up Alarm, Web UI, and Local HTTP REST API for the **Sonoff B05-BL-A60** (and `B05-BL-A19` / `B02-BL`) Wi-Fi Smart LED Bulb — **without flashing custom firmware, without soldering, and without Home Assistant**.
+Lightweight, standalone Python CLI, custom Sunrise Wake-Up Alarm, AI Agent Skill (`SKILL.md`), Web UI, and Local HTTP REST API for the **Sonoff B05-BL-A60** (and `B05-BL-A19` / `B02-BL`) Wi-Fi Smart LED Bulb — **without flashing custom firmware, without soldering, and without Home Assistant**.
 
 ## Hardware & Protocol Specifications
 
@@ -9,6 +9,10 @@ If you own a **Sonoff B05-BL-A60** (RGBCW, E27, 9W) smart bulb, it typically app
 * **Microcontroller (SoC):** **Bouffalo Lab BL602** (RISC-V Wi-Fi 2.4 GHz + Bluetooth LE)
 * **LED Driver IC:** `BP5758` (I2C)
 * **eWeLink Protocol Profile:** **`UIID 136`** (`type=light`, local HTTP API on `8081/TCP`, mDNS discovery `_ewelink._tcp.local.` on `5353/UDP`)
+
+## Credits & Acknowledgments
+
+Special thanks to Alexey (**[@AlexxIT](https://github.com/AlexxIT)**) and the **[AlexxIT/SonoffLAN](https://github.com/AlexxIT/SonoffLAN)** repository for reverse-engineering the eWeLink LAN Mode protocol, the `UIID 136` (`XLightB05B`) `dimmable` payload format, and the CoolKit v2 cloud authentication flow.
 
 ## How It Works & Why One-Time eWeLink Login Is Required
 
@@ -83,6 +87,12 @@ python sonoff_bulb.py morning --status
 python sonoff_bulb.py morning --stop
 ```
 
+## AI Agent Skill (`SKILL.md`)
+
+This repository includes a ready-to-use **[SKILL.md](SKILL.md)** file formatted for autonomous AI agents (such as Hermes, Claude Code, Cursor, or custom tool-calling agents).
+* Drop `SKILL.md` into your agent's skill directory and place `sonoff_bulb.py` (along with your generated `bulb_config.json`) inside a `scripts/` subfolder.
+* It uses cross-shell forward-slash paths (`"C:/.../sonoff_bulb.py"`) that work identically across Git Bash/MSYS, PowerShell, CMD, and Linux/macOS, allowing your agent to control room lighting or schedule morning sunrise alarms via cronjobs.
+
 ## Local HTTP REST API & Web Control Panel (`serve`)
 
 Start the built-in lightweight HTTP server:
@@ -97,10 +107,6 @@ python sonoff_bulb.py serve --port 8000
   * `{"br": 85, "kelvin": 3500}`
   * `{"rgb": [0, 140, 255], "br": 100}`
   * `{"effect": "party"}`
-
-## Credits & Acknowledgments
-
-Special thanks to Alexey (**[@AlexxIT](https://github.com/AlexxIT)**) and the **[AlexxIT/SonoffLAN](https://github.com/AlexxIT/SonoffLAN)** repository for reverse-engineering the eWeLink LAN Mode protocol, the `UIID 136` (`XLightB05B`) `dimmable` payload format, and the CoolKit v2 cloud authentication flow.
 
 ## License
 

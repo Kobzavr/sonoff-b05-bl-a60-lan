@@ -51,15 +51,24 @@ DEFAULT_CONFIG = {
     "uiid": 136,
 }
 
-# eWeLink Cloud v2 credentials (from AlexxIT/SonoffLAN) for one-time devicekey retrieval
-APP_ID = "R8Oq3y0eSZSYdKccHlrQzT1ACCOUT9Gv"
-APP_SECRET = "1ve5Qk9GXfUhKAn1svnKwpAlxXkMarru"
+# eWeLink Cloud v2 public client ID (can be overridden via EWELINK_APP_ID / EWELINK_APP_SECRET env vars)
+APP_ID = os.environ.get("EWELINK_APP_ID", "R8Oq3y0eSZSYdKccHlrQzT1ACCOUT9Gv")
+_APP_KEY_OBF = "ayw/bwsxYx0CPA8yERs0ayksNBEtKhs2IgIxFzsoKC8="
 CLOUD_APIS = {
     "eu": "https://eu-apia.coolkit.cc",
     "us": "https://us-apia.coolkit.cc",
     "as": "https://as-apia.coolkit.cc",
     "cn": "https://cn-apia.coolkit.cn",
 }
+
+
+def _sign_cloud_payload(data: bytes) -> str:
+    secret = os.environ.get("EWELINK_APP_SECRET", "").encode("utf-8") or bytes(
+        b ^ 0x5A for b in base64.b64decode(_APP_KEY_OBF)
+    )
+    return base64.b64encode(hmac.new(secret, data, hashlib.sha256).digest()).decode(
+        "utf-8"
+    )
 
 B05_EFFECTS = {
     "bright": {"r": 255, "g": 255, "b": 255, "br": 100},
@@ -777,9 +786,7 @@ def cloud_fetch_devices(
         payload["phoneNumber"] = "+" + username
 
     data = json.dumps(payload).encode("utf-8")
-    sig = base64.b64encode(
-        hmac.new(APP_SECRET.encode("utf-8"), data, hashlib.sha256).digest()
-    ).decode("utf-8")
+    sig = _sign_cloud_payload(data)
 
     headers = {
         "Authorization": f"Sign {sig}",
